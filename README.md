@@ -2,20 +2,20 @@
 
 # Features
 
-**auth-test** › POST / authenticate
+**auth-test** . POST / authenticate
 
-**images-test** › POST / create an image
-**images-test** › GET /:username/images get images by user
-**images-test** › GET /:image one image
-**images-test** › GET / all images
-**images-test** › DELETE /:image delete one image
-**images-test** › POST /award AddAward
+**images-test** . POST / create an image
+**images-test** . GET /:username/images get images by user
+**images-test** . GET /:image one image
+**images-test** . GET / all images
+**images-test** . DELETE /:image delete one image
+**images-test** . POST /award AddAward
 
-**users-test** › POST / create user
-**users-test** › GET /:username
-**users-test** › GET /mastery/:mastery getUsersByMastery
-**users-test** › POST /:username/mastery editMastery
-**users-test** › POST /:username/avatar addAvatar
+**users-test** . POST / create user
+**users-test** . GET /:username
+**users-test** . GET /mastery/:mastery getUsersByMastery
+**users-test** . POST /:username/mastery editMastery
+**users-test** . POST /:username/avatar addAvatar
 
 # LICENSE
 MIT License

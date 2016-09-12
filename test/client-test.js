@@ -227,54 +227,53 @@ test('Get users by masteries', async t => {
 
 test('add user avatar', async t => {
   const client = t.context.cli
-
+  let avatarImage = 'a_random_avatar.jpg'
   let token = 'xxx-xxx-xxx'
 
-  let sponsor = fixtures.getUser()
-  let image = fixtures.getPicture()
+  let user = fixtures.getUser()
 
-  let imageId = image.publicId
+  let username = user.username
 
-  let award = {
-    sponsor: sponsor.username,
-    type: 'amazing'
+  let avatar = {
+    avatar: avatarImage,
+    userId: user.userId
   }
 
-  nock(options.endpoints.pictures, {
+  nock(options.endpoints.users, {
     reqHeaders: {
       'Authorization': `Bearer ${token}`
     }
   })
-    .post(`/award/${imageId}`, award)
-    .reply(200, image)
+    .post(`/avatar/${username}`, avatar)
+    .reply(200, user)
 
-  let result = await client.addAvatar(imageId, award, token)
-  t.deepEqual(result, image)
+  let result = await client.addAvatar(username, avatar, token)
+  t.deepEqual(result, user)
 })
 
 test('edit user masteries', async t => {
   const client = t.context.cli
 
   let token = 'xxx-xxx-xxx'
+  let masteries = ['photo', 'brand']
 
-  let sponsor = fixtures.getUser()
-  let image = fixtures.getPicture()
+  let user = fixtures.getUser()
 
-  let imageId = image.publicId
+  let username = user.username
 
-  let award = {
-    sponsor: sponsor.username,
-    type: 'amazing'
+  let data = {
+    userId: user.publicId,
+    masteries: masteries
   }
 
-  nock(options.endpoints.pictures, {
+  nock(options.endpoints.users, {
     reqHeaders: {
       'Authorization': `Bearer ${token}`
     }
   })
-    .post(`/award/${imageId}`, award)
-    .reply(200, image)
+    .post(`/mastery/${username}`, data)
+    .reply(200, user)
 
-  let result = await client.editMasteries(imageId, award, token)
-  t.deepEqual(result, image)
+  let result = await client.editMasteries(username, data, token)
+  t.deepEqual(result, user)
 })
