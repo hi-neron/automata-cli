@@ -9,7 +9,8 @@ let options = {
   endpoints: {
     auth: 'http://automata.test/auth',
     users: 'http://automata.test/users',
-    pictures: 'http://automata.test/pictures'
+    pictures: 'http://automata.test/pictures',
+    contributions: 'http://api.automata.co/contributions'
   }
 }
 
@@ -35,11 +36,19 @@ test('asegurar cliente', t => {
   t.is(typeof client.createUser, 'function')
   t.is(typeof client.getUser, 'function')
   t.is(typeof client.getUsersByMastery, 'function')
-
   t.is(typeof client.addAvatar, 'function')
   t.is(typeof client.editMasteries, 'function')
+
+// Contributions
+  t.is(typeof client.editContrib, 'function')
+  t.is(typeof client.rateContrib, 'function')
+  t.is(typeof client.getTenContribs, 'function')
+  t.is(typeof client.getContrib, 'function')
+  t.is(typeof client.createContrib, 'function')
+  t.is(typeof client.deleteContrib, 'function')
 })
 
+// autenticacion
 test('authenticate', async t => {
   const client = t.context.cli
 
@@ -61,6 +70,7 @@ test('authenticate', async t => {
   t.deepEqual(result, token)
 })
 
+// images
 test('create an image', async t => {
   const client = t.context.cli
 
@@ -156,7 +166,6 @@ test('delete picture', async t => {
   t.deepEqual(result, response)
 })
 
-// addPictureAward(iamgeId, award, token)
 test('add picture award', async t => {
   const client = t.context.cli
 
@@ -184,6 +193,7 @@ test('add picture award', async t => {
   t.deepEqual(result, image)
 })
 
+// users
 test('create an user', async t => {
   const client = t.context.cli
 
@@ -277,3 +287,59 @@ test('edit user masteries', async t => {
   let result = await client.editMasteries(username, data, token)
   t.deepEqual(result, user)
 })
+
+// contributions
+
+test('Get contribution', async t => {
+  const client = t.context.cli
+
+  let contrib = fixtures.getContrib()
+
+  nock(options.endpoints.contributions)
+    .get(`/${contrib.publicId}`)
+    .reply(200, contrib)
+
+  let result = await client.getContrib(contrib.publicId)
+  t.deepEqual(result, contrib)
+})
+
+test('Get ten contribution', async t => {
+  const client = t.context.cli
+
+  let contribs = fixtures.getContribs()
+  let lastT = 0 // ultimas 10 publciaciones
+
+  nock(options.endpoints.contributions)
+    .get(`/last/${lastT}`)
+    .reply(200, contribs)
+
+  let result = await client.getTenContribs(lastT)
+  t.deepEqual(result, contribs)
+  t.is(result.length, contribs.length)
+})
+
+test('Create one contribution', async t => {
+  const client = t.context.cli
+
+  let token = 'xxx-xxx-xxx'
+  let contrib = fixtures.getContrib()
+
+  let username = 'jorgito'
+  let newContrib = contrib.data
+  contrib.data.username = username
+
+  nock(options.endpoints.contributions, {
+    reqHeaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .post('/', newContrib)
+    .reply(200, contrib)
+
+  let result = await client.createContrib(newContrib, username, token)
+  t.deepEqual(result, contrib)
+})
+
+test.todo('deleteContrib')
+test.todo('editContrib')
+test.todo('rateContrib')

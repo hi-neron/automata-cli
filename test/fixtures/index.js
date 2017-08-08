@@ -38,6 +38,48 @@ const fixtures = {
       this.getUser(),
       this.getUser()
     ]
+  },
+  getContrib () {
+    return {
+      publicId: '6QjLPtk8EYHsb0G9FIqftU',
+      id: 'e0de1420-01ba-4e19-91c6-00a76ba0668a',
+      title: 'Una contrib',
+      dateAdded: '2017-08-08T12:40:00.368Z',
+      user: {
+        userId: '6QjLPtk8EYHsb0G9FIqftU',
+        username: 'roberto',
+        title: 'Esparandaculo',
+        avatar: 'pepe.jpg'
+      },
+      tags: ['#love', '#data'],
+      data: {
+        type: 'message',
+        info: 'esta es mi contribucuon',
+        image: 'noTieneImage.png'
+      },
+      messages: [
+        {
+          date: '2017-08-08T12:40:00.368Z',
+          message: 'hola mundo',
+          user: {
+            username: 'titi',
+            avatar: 'nono.png'
+          }
+        }
+      ],
+      rate: ['pepe', 'conan'],
+      dev: {
+        message: null,
+        approval: false
+      }
+    }
+  },
+  getContribs () {
+    return [
+      this.getContrib(),
+      this.getContrib(),
+      this.getContrib()
+    ]
   }
 }
 
