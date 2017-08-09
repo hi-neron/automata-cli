@@ -340,6 +340,137 @@ test('Create one contribution', async t => {
   t.deepEqual(result, contrib)
 })
 
-test.todo('deleteContrib')
-test.todo('editContrib')
-test.todo('rateContrib')
+test('deleteContrib', async t => {
+  const client = t.context.cli
+
+  let contrib = fixtures.getContrib()
+  let user = fixtures.getUser()
+  let token = 'xxx-xxx-xxx'
+
+  let contribId = contrib.publicId
+  let username = user.username
+
+  let response = {
+    message: `Contribution ${contribId} successful deleted`,
+    status: 200
+  }
+
+  let data = {
+    username: username,
+    contribId: contribId
+  }
+
+  nock(options.endpoints.contributions, {
+    reqHeaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .delete('/', data)
+    .reply(200, response)
+
+  let result = await client.deleteContrib(contribId, username, token)
+  t.deepEqual(result, response)
+})
+
+test('editContrib', async t => {
+  const client = t.context.cli
+  let token = 'xxx-xxx'
+  let contribId = '123123'
+  let username = 'holaMundo'
+
+  let changes = {
+    type: 'efe',
+    image: 'werw',
+    info: 'efw2ef'
+  }
+
+  let data = {
+    contribId: contribId,
+    username: username,
+    changes: changes
+  }
+
+  let response = {
+    status: 200,
+    message: 'edit success'
+  }
+
+  nock(options.endpoints.contributions, {
+    reqHeaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .post('/edit', data)
+    .reply(200, response)
+
+  let result = await client.editContrib(contribId, username, changes, token)
+  t.is(result.status, 200, 'status code 200')
+})
+
+test('rateContrib', async t => {
+  let client = t.context.cli
+
+  let token = 'xxx-xxx-xxx'
+  let scoringUsername = 'fastasma'
+  let contribId = '123193418'
+
+  let data = {
+    contribId: contribId,
+    username: scoringUsername
+  }
+
+  let response = {
+    status: 200,
+    contribId: contribId
+  }
+
+  nock(options.endpoints.contributions, {
+    reqHeaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .post('/rate', data)
+    .reply(200, response)
+
+  let result = await client.rateContrib(contribId, scoringUsername, token)
+  console.log(result)
+  t.is(result.status, 200, 'status code 200')
+})
+
+test('devRes', async t => {
+  let client = t.context.cli
+
+  let token = 'xxx-xxx-xxx'
+
+  let username = 'fastasma'
+  let contribId = '123193418'
+
+  let devResponse = {
+    message: 'Esto puede funcionar',
+    approval: true
+  }
+
+  let data = {
+    contribId: contribId,
+    username: username,
+    devRes: devResponse
+  }
+
+  let response = {
+    status: 200,
+    message: devResponse.message,
+    approval: devResponse.approval
+  }
+
+  nock(options.endpoints.contributions, {
+    reqHeaders: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+    .post('/devRes', data)
+    .reply(200, response)
+
+  let result = await client.devRes(contribId, username, devResponse, token)
+  console.log(result)
+  t.is(result.message, response.message)
+})
