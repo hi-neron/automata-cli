@@ -318,6 +318,23 @@ test('Get ten contribution', async t => {
   t.is(result.length, contribs.length)
 })
 
+test('Get contributions by tag', async t => {
+  const client = t.context.cli
+
+  let contrib = fixtures.getContrib()
+  let tag = contrib.tags[0]
+  console.log(tag)
+
+  let contribs = fixtures.getContribs()
+
+  nock(options.endpoints.contributions)
+    .get(`/getbytag/${tag}`)
+    .reply(200, contribs)
+
+  let result = await client.getContribsByTag(tag)
+  t.is(result.length, contribs.length)
+})
+
 test('Create one contribution', async t => {
   const client = t.context.cli
 
@@ -467,10 +484,11 @@ test('devRes', async t => {
       'Authorization': `Bearer ${token}`
     }
   })
-    .post('/devRes', data)
+    .post('/devres', data)
     .reply(200, response)
 
   let result = await client.devRes(contribId, username, devResponse, token)
   console.log(result)
   t.is(result.message, response.message)
 })
+

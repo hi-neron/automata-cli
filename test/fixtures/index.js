@@ -51,7 +51,7 @@ const fixtures = {
         title: 'Esparandaculo',
         avatar: 'pepe.jpg'
       },
-      tags: ['#love', '#data'],
+      tags: ['love', 'data'],
       data: {
         type: 'message',
         info: 'esta es mi contribucuon',
